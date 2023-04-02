@@ -68,7 +68,11 @@ export default {
     async fetchComments(postId) {
       try {
         const response = await fetch(
-          `https://58ce-36-69-89-194.ap.ngrok.io/api/post/comments/get-comment/${postId}`
+          `https://58ce-36-69-89-194.ap.ngrok.io/api/post/comments/get-comment/${postId}`,
+          {
+            method: 'GET',
+            mode: 'no-cors'
+          }
         )
         const data = await response.json()
         if (data.comments.length > 0) {
