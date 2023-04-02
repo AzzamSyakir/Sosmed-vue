@@ -33,25 +33,37 @@ export default {
       this.selectedMedia = event.target.files[0]
     },
     submitForm() {
+      const token = localStorage.getItem('access_token')
+      if (!token) {
+        // Show warning message and redirect to login page
+        Vue.notify({
+          group: 'notifications',
+          title: 'Anda harus login untuk menambahkan komentar',
+          type: 'warning'
+        })
+        window.location.href = '/login'
+        return
+      }
+
       const formData = new FormData()
       formData.append('media', this.selectedMedia)
       formData.append('caption', this.caption)
 
       axios
-        .post('http://127.0.0.1:8000/api/post/add-posts', formData, {
+        .post('https://58ce-36-69-89-194.ap.ngrok.io/api/post/add-posts', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            Authorization: `Bearer ${token}`
           }
         })
         .then((response) => {
           console.log(response.data)
-          this.successMessage = 'Post successfully added!'
+          this.successMessage = 'Post berhasil ditambahkan!'
           this.errorMessage = ''
         })
         .catch((error) => {
           console.error(error)
-          this.errorMessage = 'Failed to add post.'
+          this.errorMessage = 'Gagal menambahkan post.'
           this.successMessage = ''
         })
     }

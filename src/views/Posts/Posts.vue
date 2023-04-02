@@ -31,7 +31,7 @@
             </div>
           </li>
         </ul>
-        <p v-else>belum ada postinga , jadilah yang pertama membuat postingan</p>
+        <p v-else>belum ada postingan,jadilah yang pertama membuat postingan</p>
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@ export default {
     return {
       posts: [],
       comments: {},
-      baseUrl: 'http://127.0.0.1:8000',
+      baseUrl: 'https://58ce-36-69-89-194.ap.ngrok.io',
       comment: ''
     }
   },
@@ -55,7 +55,7 @@ export default {
   methods: {
     async fetchPosts() {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/post/getallposts')
+        const response = await fetch('https://58ce-36-69-89-194.ap.ngrok.io/api/post/getallposts')
         const data = await response.json()
         this.posts = data.posts
         for (let post of this.posts) {
@@ -68,7 +68,7 @@ export default {
     async fetchComments(postId) {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/post/comments/get-comment/${postId}`
+          `https://58ce-36-69-89-194.ap.ngrok.io/api/post/comments/get-comment/${postId}`
         )
         const data = await response.json()
         if (data.comments.length > 0) {
@@ -85,8 +85,18 @@ export default {
     async submitComment(postId) {
       try {
         const token = localStorage.getItem('access_token')
+        if (!token) {
+          // Show warning message and redirect to login page
+          Vue.notify({
+            group: 'notifications',
+            title: 'Anda harus login untuk menambahkan komentar',
+            type: 'warning'
+          })
+          window.location.href = '/login'
+          return
+        }
         const response = await fetch(
-          `http://127.0.0.1:8000/api/post/comments/add-comment/${postId}`,
+          `https://58ce-36-69-89-194.ap.ngrok.io/api/post/comments/add-comment/${postId}`,
           {
             method: 'POST',
             headers: {
