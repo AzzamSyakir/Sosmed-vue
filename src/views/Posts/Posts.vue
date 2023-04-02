@@ -31,7 +31,7 @@
             </div>
           </li>
         </ul>
-        <p v-else>belum ada postingan,jadilah yang pertama membuat postingan</p>
+        <p v-else>belum ada postingan , jadilah yang pertama membuat postingan</p>
       </div>
     </div>
   </div>
@@ -39,12 +39,13 @@
 
 <script>
 import * as Vue from 'vue'
+import Notifications from 'vue-notification'
 export default {
   data() {
     return {
       posts: [],
       comments: {},
-      baseUrl: 'https://58ce-36-69-89-194.ap.ngrok.io',
+      baseUrl: 'http://127.0.0.1:8000',
       comment: ''
     }
   },
@@ -55,7 +56,7 @@ export default {
   methods: {
     async fetchPosts() {
       try {
-        const response = await fetch('https://58ce-36-69-89-194.ap.ngrok.io/api/post/getallposts')
+        const response = await fetch('http://127.0.0.1:8000/api/post/getallposts')
         const data = await response.json()
         this.posts = data.posts
         for (let post of this.posts) {
@@ -68,11 +69,7 @@ export default {
     async fetchComments(postId) {
       try {
         const response = await fetch(
-          `https://58ce-36-69-89-194.ap.ngrok.io/api/post/comments/get-comment/${postId}`,
-          {
-            method: 'GET',
-            mode: 'no-cors'
-          }
+          `http://127.0.0.1:8000/api/post/comments/get-comment/${postId}`
         )
         const data = await response.json()
         if (data.comments.length > 0) {
@@ -100,7 +97,7 @@ export default {
           return
         }
         const response = await fetch(
-          `https://58ce-36-69-89-194.ap.ngrok.io/api/post/comments/add-comment/${postId}`,
+          `http://127.0.0.1:8000/api/post/comments/add-comment/${postId}`,
           {
             method: 'POST',
             headers: {
