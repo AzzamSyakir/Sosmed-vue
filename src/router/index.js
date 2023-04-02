@@ -3,6 +3,7 @@ import register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import dashboard from '../views/Dashboard.vue'
 import feed from '../views/Posts/Posts.vue'
+import CreatePost from '../views/Posts/buat_postingan.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,9 +25,13 @@ const router = createRouter({
       name: 'dashboard',
       component: dashboard
     },   {
-      path: '/feed',
+      path: '/',
       name: 'feed',
       component: feed
+    }, {
+      path: '/posts', 
+    component: CreatePost,
+    name: 'createPost' 
     },
     {
       path: '/about',

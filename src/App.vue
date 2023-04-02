@@ -9,7 +9,10 @@
         <router-link to="/register">Register</router-link>
       </li>
       <li>
-        <router-link to="/feed">feed</router-link>
+        <router-link to="/">home</router-link>
+      </li>
+      <li>
+        <router-link to="/posts">buat postingan</router-link>
       </li>
     </ul>
     <router-view></router-view>

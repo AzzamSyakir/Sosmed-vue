@@ -47,7 +47,7 @@ export default {
           localStorage.setItem('access_token', response.data.access_token)
           alert('login successful!')
           this.errorMessage = ''
-          this.$router.push('/dashboard')
+          this.$router.push('/feed')
         })
 
         .catch((error) => {
