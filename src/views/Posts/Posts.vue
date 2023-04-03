@@ -3,7 +3,7 @@
     <h1 class="text-center my-5">List Postingan</h1>
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <ul class="list-group" v-if="posts && posts.length > 0">
+        <ul class="list-group" v-if="posts">
           <li v-for="post in posts" :key="post.id" class="list-group-item">
             <h2 class="mb-3">{{ post.caption }}</h2>
             <img :src="baseUrl + post.media" alt="post image" class="img-fluid mb-3" />
@@ -31,7 +31,6 @@
             </div>
           </li>
         </ul>
-        <p v-else>belum ada postingan , jadilah yang pertama membuat postingan</p>
       </div>
     </div>
   </div>
@@ -39,12 +38,14 @@
 
 <script>
 import * as Vue from 'vue'
-import Notifications from 'vue-notification'
 export default {
   data() {
     return {
       posts: [],
-      comments: {},
+      comments: {
+        // initialize comments object with empty key-value pairs
+        //...
+      },
       baseUrl: 'http://127.0.0.1:8000',
       comment: ''
     }
@@ -85,48 +86,30 @@ export default {
     },
     async submitComment(postId) {
       try {
-        const token = localStorage.getItem('access_token')
-        if (!token) {
-          // Show warning message and redirect to login page
-          Vue.notify({
-            group: 'notifications',
-            title: 'Anda harus login untuk menambahkan komentar',
-            type: 'warning'
-          })
-          window.location.href = '/login'
+        const accessToken = localStorage.getItem('access_token') || ''
+        if (!accessToken) {
+          console.log('Anda belum login')
           return
         }
+
         const response = await fetch(
           `http://127.0.0.1:8000/api/post/comments/add-comment/${postId}`,
           {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${accessToken}`
             },
             body: JSON.stringify({
-              comment: this.comment,
-              post_id: postId
+              comment: this.comment
             })
           }
         )
-        const data = await response.json()
-        if (data.success) {
+
+        if (response.status === 201) {
           this.comment = ''
-          this.comments[postId] = [...this.comments[postId], data.comment]
-          Vue.notify({
-            group: 'notifications',
-            title: 'Komentar berhasil ditambahkan',
-            type: 'success'
-          })
-          // Redirect to current page to reload comments
-          window.location.reload()
-        } else {
-          Vue.notify({
-            group: 'notifications',
-            title: 'Gagal menambahkan komentar',
-            type: 'error'
-          })
+          this.comments[postId] = [...this.comments[postId], await response.json().comment]
+          await this.fetchComments(postId)
         }
       } catch (error) {
         console.log(error)
