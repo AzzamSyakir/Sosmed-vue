@@ -16,6 +16,9 @@
       <li>
         <router-link to="/posts">buat postingan</router-link>
       </li>
+      <li>
+        <router-link to="/chat">message</router-link>
+      </li>
       <li v-if="loggedIn">
         <router-link to="/change-user">ganti akun</router-link>
       </li>

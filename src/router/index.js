@@ -5,7 +5,7 @@ import dashboard from '../views/Dashboard.vue'
 import feed from '../views/Posts/Posts.vue'
 import CreatePost from '../views/Posts/buat_postingan.vue'
 import ChangeUser from '../views/ChangeUser.vue'
-
+import chat from '../views/Message.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -14,6 +14,10 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: register
+    },    {
+      path: '/chat',
+      name: 'chat',
+      component: chat
     },
     {
       path: '/change-user',

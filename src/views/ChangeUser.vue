@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Ganti User</h2>
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="changeUser">
       <div class="form-group">
         <label for="usernameInput">Username</label>
         <input type="text" class="form-control" id="usernameInput" v-model="username" />
@@ -17,8 +17,10 @@
     </form>
   </div>
 </template>
-  
-  <script>
+
+<script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
@@ -27,10 +29,16 @@ export default {
       isLoading: false
     }
   },
+  created() {
+    const token = localStorage.getItem('access_token')
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
+  },
   methods: {
     changeUser() {
       axios
-        .post('http://127.0.0.1:8000/api/change-user', {
+        .post('http://127.0.0.1:8000/api/ChangeUser', {
           username: this.username,
           password: this.password
         })
@@ -41,7 +49,6 @@ export default {
           this.$emit('loggedInChanged', true)
           this.$router.push('/feed')
         })
-
         .catch((error) => {
           if (error.response && error.response.data && error.response.data.message) {
             this.error = error.response.data.message
@@ -53,4 +60,3 @@ export default {
   }
 }
 </script>
-  
