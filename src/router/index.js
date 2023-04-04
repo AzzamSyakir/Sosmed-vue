@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import dashboard from '../views/Dashboard.vue'
 import feed from '../views/Posts/Posts.vue'
 import CreatePost from '../views/Posts/buat_postingan.vue'
+import ChangeUser from '../views/ChangeUser.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,11 +16,15 @@ const router = createRouter({
       component: register
     },
     {
+      path: '/change-user',
+      name: 'ChangeUser',
+      component: ChangeUser
+    },   
+    {
       path: '/login',
       name: 'Login',
       component: Login
     },    
-    //home page
     {
       path: '/dashboard',
       name: 'dashboard',

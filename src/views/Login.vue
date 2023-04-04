@@ -33,7 +33,8 @@ export default {
     return {
       username: '',
       password: '',
-      error: ''
+      error: '',
+      loggedIn: false
     }
   },
   methods: {
@@ -45,11 +46,12 @@ export default {
         })
         .then((response) => {
           localStorage.setItem('access_token', response.data.access_token)
+          this.$emit('login-successful')
+          this.loggedIn = true // set loggedIn menjadi true
           alert('login successful!')
           this.errorMessage = ''
-          this.$router.push('/feed')
+          this.$router.push('/')
         })
-
         .catch((error) => {
           if (error.response && error.response.data && error.response.data.message) {
             this.error = error.response.data.message

@@ -13,7 +13,13 @@
                 <label for="commentInput">Komentar</label>
                 <textarea class="form-control" id="commentInput" rows="3" v-model="comment"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Kirim</button>
+              <button type="submit" class="btn btn-primary" :disabled="loading">
+                <span v-if="!loading">Kirim</span>
+                <span v-else>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Mengirim...
+                </span>
+              </button>
             </form>
             <div class="mt-3">
               <h4>Komentar</h4>
@@ -47,7 +53,8 @@ export default {
         //...
       },
       baseUrl: 'http://127.0.0.1:8000',
-      comment: ''
+      comment: '',
+      loading: false
     }
   },
 
@@ -92,6 +99,16 @@ export default {
           return
         }
 
+        // Mengatur nilai loading menjadi true
+        this.loading = true
+
+        // Menambahkan komentar ke dalam daftar komentar pada halaman web
+        this.comments[postId] = [...this.comments[postId], { comment: this.comment }]
+
+        // Memperbarui daftar komentar dari server
+        await this.fetchComments(postId)
+
+        // Mengirimkan data komentar ke server dan menyimpan ke dalam database
         const response = await fetch(
           `http://127.0.0.1:8000/api/post/comments/add-comment/${postId}`,
           {
@@ -106,13 +123,19 @@ export default {
           }
         )
 
+        // Jika berhasil menyimpan data ke dalam database, perbarui daftar komentar dari server
         if (response.status === 201) {
-          this.comment = ''
-          this.comments[postId] = [...this.comments[postId], await response.json().comment]
           await this.fetchComments(postId)
+          this.comment = ''
         }
+
+        // Mengatur nilai loading menjadi false setelah selesai mengirim data
+        this.loading = false
       } catch (error) {
         console.log(error)
+
+        // Mengatur nilai loading menjadi false saat terjadi error
+        this.loading = false
       }
     }
   }
