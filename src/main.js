@@ -6,6 +6,8 @@ import router from './router'
 
 import './assets/main.css'
 import "~bootstrap/scss/bootstrap.scss";
+import Pusher from 'pusher-js';
+
 
 const app = createApp(App)
 

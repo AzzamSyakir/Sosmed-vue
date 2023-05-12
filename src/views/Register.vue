@@ -4,7 +4,10 @@
       <div class="col-md-8">
         <div class="card">
           <div class="card-header">{{ formTitle }}</div>
-
+          <div class="form-group">
+            <label for="photo">photo profile:</label>
+            <input type="file" id="photo" name="photo" @change="handleMediaChange" />
+          </div>
           <div class="card-body">
             <form @submit.prevent="register">
               <div class="form-group row">
@@ -107,7 +110,8 @@ export default {
         username: '',
         email: '',
         password: '',
-        no_hp: ''
+        no_hp: '',
+        photo: ''
       },
       formTitle: 'Register',
       submitButton: 'Register'
